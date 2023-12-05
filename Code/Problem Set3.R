@@ -6,12 +6,16 @@
 # Llamar paquetes y limpiar
 rm(list=ls())
 require(pacman)
-p_load(tidyverse, rio, data.table)
+p_load(tidyverse, rio, data.table,here)
 
 # cargar el archivo
-rutas <- list.files("pset-3/input", recursive = T , full.names = T) 
+
+datos <- here("Input")
+
+rutas <- list.files(datos, recursive = T , full.names = T) 
   #carga 3 carpetas, 1/año. Recusive lo hace para c/u
   # full names es para que ponga todos los archivos
+View(rutas)
 
 
 # p1.2
@@ -33,9 +37,20 @@ lista_resto[[36]] <- NULL
 df_resto <- rbindlist( l=lista_resto , use.names = T, fill = T)
 
 
+# 2
+ggplot(df_resto, aes(x = df_resto$P6020, y = df_resto$P6050)) +
+  geom_point() +  
+  labs(title = "Scatter Plot", x = "HOGAR", y = "REGIS") +  
+  theme_dark()
 
+ggplot(df_resto, aes(x = df_resto$P6016)) +
+  geom_histogram(binwidth = 5, fill = "skyblue", color = "black") +  
+  labs(title = "Histograma de P6016", x = "P6016", y = "Frecuencia") +
+  theme_bw() 
 
-
+## export
+resultado <- here("Output")
+saveRDS(df_resto, file = paste0(resultado, "/df_resto.rds"))
 
 
 
